@@ -1,0 +1,89 @@
+<html>
+    <style>
+        section {
+            display: flex;
+            gap: 30px;
+            border: 2px solid black;
+            padding: 20px;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #gpu-spinner {
+            height: 20px;
+            width: 20px;
+            animation: spin 2s infinite linear;
+            background: cyan;
+        }
+    </style>
+    <section>
+        <label>Time</label>
+        <div id="timer"></div>
+    </section>
+    <section>
+        <label>Video</label>
+        <div id="video">
+            <video autoplay muted loop src="/nyan.mp4"></video>
+        </div>
+    </section>
+    <section>
+        <label>Touches</label>
+        <div id="touch-counter"></div>
+    </section>
+    <section>
+        <label>Clicks</label>
+        <div id="click-counter"></div>
+    </section>
+    <section>
+        <label>Battery</label>
+        <div id="battery"></div>
+    </section>
+    <section>
+        <label>GPU</label>
+        <div id="gpu">
+            <div id="gpu-spinner"></div>
+        </div>
+    </section>
+    <script>
+        const timer = document.getElementById('timer');
+        setInterval(() => {
+            const d = new Date();
+            timer.innerHTML = d.toISOString();
+        }, 100);
+
+        const touches = document.getElementById('touch-counter');
+        let touchCount = 0;
+        document.addEventListener('touchstart', () => {
+            touchCount += 1;
+            touches.innerHTML = touchCount;
+            document.querySelector('video').muted = false;
+        });
+        touches.innerHTML = touchCount;
+
+        const clicks = document.getElementById('click-counter');
+        let clickCount = 0;
+        document.addEventListener('click', () => {
+            clickCount += 1;
+            clicks.innerHTML = clickCount;
+            document.querySelector('video').muted = false;
+        });
+        clicks.innerHTML = clickCount;
+
+
+        (async function () {
+            const battery = document.getElementById('battery');
+            const batteryMgr = await navigator.getBattery();
+            setInterval(() => {
+                battery.innerHTML = `${batteryMgr.level * 100}%`;
+            }, 1000);
+        })();
+    </script>
+</html>
